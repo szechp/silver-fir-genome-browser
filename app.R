@@ -30,16 +30,18 @@ server <- function(input, output, session) {
   output$DT_annotations <-
     DT::renderDataTable(annotations, selection = "single")
   
-  output$select_entry = renderPrint(url())
+  output$select_entry = renderPrint(location())
 
   url <- reactive(paste0("http://127.0.0.1:5000/", annotations[input$DT_annotations_rows_selected,1], ".fa")
   )
+  
+  location <- reactive(paste0(annotations[input$DT_annotations_rows_selected,1],":", annotations[input$DT_annotations_rows_selected,3], "..", annotations[input$DT_annotations_rows_selected,4]))
   
   output$browserOutput <- renderJBrowseR({JBrowseR("View",
                                                   assembly = assembly(url()),
                                                   tracks = tracks(track_feature("http://127.0.0.1:5000/Abal.1_1.gff.fixed.sorted_v2.gff.gz",
                                                                                 assembly(url()))),
-                                                  location = "aalba5_s00000010:168,102..180,937", #placeholder
+                                                  location = location(), #placeholder
                                                   defaultSession = default_session(assembly(url()),
                                                                                     c(track_feature("http://127.0.0.1:5000/Abal.1_1.gff.fixed.sorted_v2.gff.gz",
                                                                                                     assembly(url()))))
