@@ -10,7 +10,7 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 source("data_wrangling_scripts/read_gff.R")
 
 data_server <-
-  serve_data("D:/Masterarbeit/silver-fir-genome-browser/genome_data")
+  serve_data("genome_data/")
 
 options(DT.options = list(pageLength = 10))
 
@@ -32,7 +32,7 @@ server <- function(input, output, session) {
   
   output$select_entry = renderPrint(location())
 
-  url <- reactive(paste0("http://127.0.0.1:5000/", annotations[input$DT_annotations_rows_selected,1], ".fa")
+  url <- reactive(paste0("http://127.0.0.1:5000/splitfasta/splitted/", annotations[input$DT_annotations_rows_selected,1], ".fa")
   )
   
   location <- reactive(paste0(annotations[input$DT_annotations_rows_selected,1],":", annotations[input$DT_annotations_rows_selected,3], "..", annotations[input$DT_annotations_rows_selected,4]))
