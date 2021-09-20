@@ -13,6 +13,20 @@ a searchable genome browser for the European silver fir (Abies alba)
 * stringr
 ### Command-line tools
 * [genometools](http://genometools.org/)
+* [samtools](https://www.htslib.org/)
+* [tabix](https://www.htslib.org/)
+* [gffread](https://github.com/gpertea/gffread) optional, for fixing bad gff-files
+* [faSplit](http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faSplit)
 ## Tools and data preparation workflow
 ### Preparing the genome fasta
+using faSplit start with extracting each single fasta from the genome
+```
+faSplit byname your_file.fa /genome_data/splitted
+```
+create a index file for each single fasta
+```
+for FILE in *; do samtools faidx $FILE; done
+```
+(this takes a long time, took me two days)
+
 ### preparing the annotation file
