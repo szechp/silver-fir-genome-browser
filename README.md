@@ -5,6 +5,12 @@ a searchable genome browser for the European silver fir (Abies alba)
 ### Genome data information
 ## Dependencies
 ### R libraries
+* shiny
+* DT
+* JBrowseR
+* dbplyr
+* tidyr
+* stringr
 ### Command-line tools
 ## Tools and data preparation workflow
 ### Preparing the genome fasta
