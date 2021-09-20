@@ -12,6 +12,7 @@ a searchable genome browser for the European silver fir (Abies alba)
 * tidyr
 * stringr
 ### Command-line tools
+* [genometools](http://genometools.org/)
 ## Tools and data preparation workflow
 ### Preparing the genome fasta
 ### preparing the annotation file
