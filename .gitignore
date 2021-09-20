@@ -38,5 +38,6 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-#genome Data, otherwise the respository would be too big
+#genome Data, database otherwise the respository would be too big
 /genome_data/
+database.csv
