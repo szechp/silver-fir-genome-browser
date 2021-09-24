@@ -1,22 +1,29 @@
 library(shiny)
+library(data.table)
 library(DT)
 library(JBrowseR)
 
 #set working directory to script destination
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-##get necessary data
-
+#file check to avoid recreating the db at every start up
 if (file.exists("database.csv") == F) {
   source("data_wrangling_scripts/read_gff.R")
 }
 
-database <- read.csv("database.csv", row.names = 1, check.names=F)
+#read csv to data table
+database <- fread("database.csv")
+colnames(database)[1] <- "No."
+setindex(database, Names, ID)
 
+#create local server to serve genome data
 data_server <- serve_data("genome_data/")
 
-options(DT.options = list(pageLength = 10))
+options(DT.options = list(pageLength = 5))
 
+#############
+##shiny app##
+#############
 ui <- fluidPage(titlePanel("Tabsets"),
                 mainPanel(tabsetPanel(
                   type = "tabs",
@@ -31,14 +38,14 @@ ui <- fluidPage(titlePanel("Tabsets"),
 
 server <- function(input, output, session) {
   output$DT_annotations <-
-    DT::renderDataTable(database, selection = "single")
+    DT::renderDataTable(database, selection = "single", rownames = F)
   
   output$select_entry = renderPrint(location())
 
-  url <- reactive(paste0("http://127.0.0.1:5000/splitfasta/splitted/", database[input$DT_annotations_rows_selected,1], ".fa")
+  url <- reactive(paste0("http://127.0.0.1:5000/splitfasta/splitted/", database[input$DT_annotations_rows_selected,2], ".fa")
   )
   
-  location <- reactive(paste0(database[input$DT_annotations_rows_selected,1],":", database[input$DT_annotations_rows_selected,3], "..", database[input$DT_annotations_rows_selected,4]))
+  location <- reactive(paste0(database[input$DT_annotations_rows_selected,2],":", database[input$DT_annotations_rows_selected,4], "..", database[input$DT_annotations_rows_selected,5]))
   
   output$browserOutput <- renderJBrowseR({JBrowseR("View",
                                                   assembly = assembly(url()),
