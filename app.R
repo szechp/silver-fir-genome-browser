@@ -20,8 +20,12 @@ database <- fread("database.csv")
 colnames(database)[1] <- "No."
 setindex(database, Names, ID)
 
-#create local server to serve genome data
-data_server <- serve_data("genome_data/")
+
+#check if config.R contains localhost, create local server to serve genome data if true
+if (grepl("http://127.0.0.1:5000*", splitted_fastas_url) == T &
+    grepl("http://127.0.0.1:5000*", annotation_file_url) == T) {
+  data_server <- serve_data("genome_data/")
+}
 
 options(DT.options = list(pageLength = 5))
 
