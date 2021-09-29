@@ -8,8 +8,11 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 #file check to avoid recreating the db at every start up
 if (file.exists("database.csv") == F) {
-  source("data_wrangling_scripts/read_gff.R")
+  source("data_wrangling_scripts/create_full_text_search_database.R")
 }
+
+#read config file
+source("config.R")
 
 #read csv to data table
 database <- fread("database.csv")
@@ -42,18 +45,18 @@ server <- function(input, output, session) {
   
   output$select_entry = renderPrint(location())
 
-  url <- reactive(paste0("http://127.0.0.1:5000/splitfasta/splitted/", database[input$DT_annotations_rows_selected,2], ".fa")
+  url <- reactive(paste0(splitted_fastas_url, database[input$DT_annotations_rows_selected,2], ".fa")
   )
   
   location <- reactive(paste0(database[input$DT_annotations_rows_selected,2],":", database[input$DT_annotations_rows_selected,4], "..", database[input$DT_annotations_rows_selected,5]))
   
   output$browserOutput <- renderJBrowseR({JBrowseR("View",
                                                   assembly = assembly(url()),
-                                                  tracks = tracks(track_feature("http://127.0.0.1:5000/Abal.1_1.gff.fixed.sorted_v2.gff.gz",
+                                                  tracks = tracks(track_feature(annotation_file,
                                                                                 assembly(url()))),
                                                   location = location(), #placeholder
                                                   defaultSession = default_session(assembly(url()),
-                                                                                    c(track_feature("http://127.0.0.1:5000/Abal.1_1.gff.fixed.sorted_v2.gff.gz",
+                                                                                    c(track_feature(annotation_file,
                                                                                                     assembly(url()))))
     )
   })
