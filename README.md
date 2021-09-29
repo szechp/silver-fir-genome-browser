@@ -61,17 +61,22 @@ BUSCO Results
 * dbplyr
 * tidyr
 * stringr
+* shinythemes
+* 
+* plyr
+* XML
 ### Command-line tools
 * [genometools](http://genometools.org/)
 * [samtools](https://www.htslib.org/)
 * [tabix](https://www.htslib.org/)
 * [gffread](https://github.com/gpertea/gffread) optional, for fixing bad gff-files
 * [faSplit](http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faSplit)
+* [BLAST](https://ncbi.github.io/magicblast/doc/download.html) i linked Magic-BLAST here but any BLAST should work
 ## Tools and data preparation workflow
 ### Preparing the genome fasta
 using faSplit start with extracting each single fasta from the genome
 ```
-faSplit byname your_file.fa /genome_data/splitted
+faSplit byname <your_file.fa> /path/to/file
 ```
 create a index file for each single fasta
 ```
@@ -80,15 +85,21 @@ for FILE in *; do samtools faidx $FILE; done
 (this takes a long time, took me two days)
 
 ### preparing the annotation file
-fix the gff file if needed
+
+#### fix the gff file if needed
 ```
-gffread -O in.gff -o out.gff
+gffread -O <in.gff> -o <out.gff>
 
 ```
-prepare gff file for Jbrowse
+#### prepare gff file for Jbrowse
 ```
-gt gff3 -sortlines -tidy -retainids in_fixed.gff > out.sorted.gff
-bgzip out.sorted.gff
-tabix out.sorted.gff.gz
+gt gff3 -sortlines -tidy -retainids <in_fixed.gff> > <out.sorted.gff>
+bgzip <out.sorted.gff>
+tabix <out.sorted.gff.gz>
+```
 
+### making a blast database from a fasta file
 ```
+makeblastdb -in <your_file.fa> -out <my_blast_db> -parse_seqids -dbtype nucl
+```
+
