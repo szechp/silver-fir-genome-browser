@@ -52,11 +52,11 @@ server <- function(input, output, session) {
   
   output$browserOutput <- renderJBrowseR({JBrowseR("View",
                                                   assembly = assembly(url()),
-                                                  tracks = tracks(track_feature(annotation_file,
+                                                  tracks = tracks(track_feature(annotation_file_url,
                                                                                 assembly(url()))),
                                                   location = location(), #placeholder
                                                   defaultSession = default_session(assembly(url()),
-                                                                                    c(track_feature(annotation_file,
+                                                                                    c(track_feature(annotation_file_url,
                                                                                                     assembly(url()))))
     )
   })
