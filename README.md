@@ -73,6 +73,8 @@ BUSCO Results
 * [faSplit](http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faSplit)
 * [BLAST](https://ncbi.github.io/magicblast/doc/download.html) i linked Magic-BLAST here but any BLAST should work
 ## Tools and data preparation workflow
+You need to prepare the files using the guides below and add them to config.R
+
 ### Preparing the genome fasta
 using faSplit start with extracting each single fasta from the genome
 ```
@@ -102,7 +104,3 @@ tabix <out.sorted.gff.gz>
 ```
 makeblastdb -in <your_file.fa> -out <my_blast_db> -parse_seqids -dbtype nucl
 ```
-
-
-###
-In the end you need to specify the location of the folders and files created above in the config.R file.
