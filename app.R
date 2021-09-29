@@ -2,6 +2,7 @@ library(shiny)
 library(data.table)
 library(DT)
 library(JBrowseR)
+library(shinythemes)
 
 #set working directory to script destination
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
@@ -27,17 +28,15 @@ options(DT.options = list(pageLength = 5))
 #############
 ##shiny app##
 #############
-ui <- fluidPage(titlePanel("Tabsets"),
-                mainPanel(tabsetPanel(
-                  type = "tabs",
-                  tabPanel(
-                    "full-text search",
+ui <- fluidPage(theme = shinytheme("flatly"),
+                navbarPage("Abies Alba Genome Browser",
+                  tabPanel("full-text search",
                     DT::dataTableOutput("DT_annotations"),
                     verbatimTextOutput("select_entry"),
                     JBrowseROutput("browserOutput")
                   ),
                   tabPanel("BLAST-search")
-                )))
+                ))
 
 server <- function(input, output, session) {
   output$DT_annotations <-
