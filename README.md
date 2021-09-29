@@ -103,3 +103,6 @@ tabix <out.sorted.gff.gz>
 makeblastdb -in <your_file.fa> -out <my_blast_db> -parse_seqids -dbtype nucl
 ```
 
+
+###
+In the end you need to specify the location of the folders and files created above in the config.R file.
