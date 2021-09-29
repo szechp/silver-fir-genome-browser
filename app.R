@@ -34,7 +34,7 @@ ui <- fluidPage(titlePanel("Tabsets"),
                     JBrowseROutput("browserOutput")
                   ),
                   tabPanel("BLAST-search")
-                ), ))
+                )))
 
 server <- function(input, output, session) {
   output$DT_annotations <-
