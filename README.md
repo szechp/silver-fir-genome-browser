@@ -72,7 +72,7 @@ BUSCO Results
 * [tabix](https://www.htslib.org/)
 * [gffread](https://github.com/gpertea/gffread) optional, for fixing bad gff-files
 * [faSplit](http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faSplit)
-* [BLAST](https://ncbi.github.io/magicblast/doc/download.html) i linked Magic-BLAST here but any BLAST should work
+* [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 ## Tools and data preparation workflow
 You need to prepare the files using the guides below and add them to config.R
 
