@@ -1,11 +1,11 @@
 library(shinythemes)
 library(DT)
-require(XML)
+library(XML)
 library(plyr)
 library(dplyr)
 
 
-custom_db <- c("LvTx")
+custom_db <- c("Abal.1_1_filtered.1000")
 
 ui <- fluidPage(theme = shinytheme("cerulean"),
                 tagList(
@@ -45,8 +45,8 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
 
 server <- function(input, output, session){
   
-  custom_db <- c("LvTx")
-  custom_db_path <- c("/LV_transcriptome/LvTx")
+  custom_db <- c("Abal.1_1_filtered.1000.fa")
+  custom_db_path <- c("/media/sf_Masterarbeit/silver-fir-genome-browser/genome_data/splitfasta")
   
   blastresults <- eventReactive(input$blast, {
     
@@ -72,7 +72,7 @@ server <- function(input, output, session){
     }
     
     #calls the blast
-    data <- system(paste0(input$program," -query ",tmp," -db ",db," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 ",remote), intern = T)
+    data <- system(paste0("~/ncbi-blast-2.12.0+/bin/", input$program," -query ",tmp," -db ",db," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 ",remote), intern = T)
     xmlParse(data)
   }, ignoreNULL= T)
   
