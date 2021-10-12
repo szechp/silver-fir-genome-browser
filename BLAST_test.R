@@ -5,7 +5,7 @@ library(plyr)
 library(dplyr)
 
 
-custom_db <- c("Abal.1_1_filtered.1000")
+#custom_db <- c("Abal.1_1_filtered.1000")
 
 ui <- fluidPage(theme = shinytheme("cerulean"),
                 tagList(
@@ -19,9 +19,9 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
                 mainPanel(
                   headerPanel('Shiny Blast!'),
                   textAreaInput('query', 'Input sequence:', value = "", placeholder = "", width = "600px", height="200px"),
-                  selectInput("db", "Databse:", choices=c(custom_db,"nr"), width="120px"),
-                  div(style="display:inline-block",
-                      selectInput("program", "Program:", choices=c("blastn","tblastn"), width="100px")),
+                  #selectInput("db", "Databse:", choices=c(custom_db,"nr"), width="120px"),
+                  #div(style="display:inline-block",
+                  #    selectInput("program", "Program:", choices=c("blastn","tblastn"), width="100px")),
                   div(style="display:inline-block",
                       selectInput("eval", "e-value:", choices=c(1,0.001,1e-4,1e-5,1e-10), width="120px")),
                   actionButton("blast", "BLAST!")
@@ -45,8 +45,8 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
 
 server <- function(input, output, session){
   
-  custom_db <- c("Abal.1_1_filtered.1000.fa")
-  custom_db_path <- c("/media/sf_Masterarbeit/silver-fir-genome-browser/genome_data/splitfasta")
+  custom_db <- c("Abal.1_1_filtered.1000.blast_db")
+  custom_db_path <- c("/media/sf_Masterarbeit/silver-fir-genome-browser/genome_data/splitfasta/Abal.1_1_filtered.1000.blast_db")
   
   blastresults <- eventReactive(input$blast, {
     
@@ -55,14 +55,15 @@ server <- function(input, output, session){
     tmp <- tempfile(fileext = ".fa")
     
     #if else chooses the right database
-    if (input$db == custom_db){
-      db <- custom_db_path
-      remote <- c("")
-    } else {
-      db <- c("nr")
-      #add remote option for nr since we don't have a local copy
-      remote <- c("-remote")
-    }
+    
+    # if (input$db == custom_db){
+    #   db <- custom_db_path
+    #   remote <- c("")
+    # } else {
+    #   db <- c("nr")
+    #   #add remote option for nr since we don't have a local copy
+    #   remote <- c("-remote")
+    # }
     
     #this makes sure the fasta is formatted properly
     if (startsWith(query, ">")){
@@ -72,7 +73,8 @@ server <- function(input, output, session){
     }
     
     #calls the blast
-    data <- system(paste0("~/ncbi-blast-2.12.0+/bin/", input$program," -query ",tmp," -db ",db," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 ",remote), intern = T)
+    data <- system(paste0("~/ncbi-blast-2.12.0+/bin/blastn", " -query ",tmp," -db ",custom_db_path," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 "), intern = T)
+    #write.table(data, file = "debug2.txt")
     xmlParse(data)
   }, ignoreNULL= T)
   
