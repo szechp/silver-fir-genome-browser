@@ -3,6 +3,7 @@ library(DT)
 library(XML)
 library(plyr)
 library(dplyr)
+library(JBrowseR)
 
 
 #custom_db <- c("Abal.1_1_filtered.1000")
@@ -18,12 +19,11 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
                 #This block gives us all the inputs:
                 mainPanel(
                   headerPanel('Shiny Blast!'),
-                  textAreaInput('query', 'Input sequence:', value = "", placeholder = "", width = "600px", height="200px"),
+                  textAreaInput('query', 'Input sequence:', value = "", placeholder = "", width = "100%", height="200px"),
                   #selectInput("db", "Databse:", choices=c(custom_db,"nr"), width="120px"),
                   #div(style="display:inline-block",
                   #    selectInput("program", "Program:", choices=c("blastn","tblastn"), width="100px")),
-                  div(style="display:inline-block",
-                      selectInput("eval", "e-value:", choices=c(1,0.001,1e-4,1e-5,1e-10), width="120px")),
+                  selectInput("eval", "e-value:", choices=c(1,0.001,1e-4,1e-5,1e-10), width="100px"),
                   actionButton("blast", "BLAST!")
                 ),
                 
@@ -38,7 +38,8 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
                   h4("Results"),
                   DT::dataTableOutput("blastResults"),
                   p("Alignment:", tableOutput("clicked") ),
-                  verbatimTextOutput("alignment")
+                  verbatimTextOutput("alignment"),
+                  JBrowseROutput("browserOutput")
                 )
 )
 
@@ -88,10 +89,12 @@ server <- function(input, output, session){
       results <- xpathApply(blastresults(), '//Iteration',function(row){
         query_ID <- getNodeSet(row, 'Iteration_query-def') %>% sapply(., xmlValue)
         hit_IDs <- getNodeSet(row, 'Iteration_hits//Hit//Hit_id') %>% sapply(., xmlValue)
+        hit_to <- getNodeSet(row, 'Iteration_hits//Hit//Hit_hsps//Hsp//Hsp_hit-from') %>% sapply(., xmlValue)
+        hit_from <- getNodeSet(row, 'Iteration_hits//Hit//Hit_hsps//Hsp//Hsp_hit-to') %>% sapply(., xmlValue)
         hit_length <- getNodeSet(row, 'Iteration_hits//Hit//Hit_len') %>% sapply(., xmlValue)
         bitscore <- getNodeSet(row, 'Iteration_hits//Hit//Hit_hsps//Hsp//Hsp_bit-score') %>% sapply(., xmlValue)
         eval <- getNodeSet(row, 'Iteration_hits//Hit//Hit_hsps//Hsp//Hsp_evalue') %>% sapply(., xmlValue)
-        cbind(query_ID,hit_IDs,hit_length,bitscore,eval)
+        cbind(query_ID,hit_IDs,hit_from,hit_to,hit_length,bitscore,eval)
       })
       #this ensures that NAs get added for no hits
       results <-  rbind.fill(lapply(results,function(y){as.data.frame((y),stringsAsFactors=FALSE)}))
@@ -116,7 +119,7 @@ server <- function(input, output, session){
       
       tableout <- t(tableout)
       names(tableout) <- c("")
-      rownames(tableout) <- c("Query ID","Hit ID", "Length", "Bit Score", "e-value")
+      rownames(tableout) <- c("Query ID","Hit ID" , "Hit from", "to", "Length", "Bit Score", "e-value")
       colnames(tableout) <- NULL
       data.frame(tableout)
     }
@@ -149,6 +152,23 @@ server <- function(input, output, session){
       unlist(split_out)
     }
   })
+  
+  url <- reactive(paste0(splitted_fastas_url, parsedresults()[input$blastResults_rows_selected,2], ".fa")
+  )
+  
+  location <- reactive(paste0(parsedresults()[input$blastResults_rows_selected,2],":", parsedresults()[input$blastResults_rows_selected,3], "..", parsedresults()[input$blastResults_rows_selected,4]))
+  
+  output$browserOutput <- renderJBrowseR({JBrowseR("View",
+                                                   assembly = assembly(url()),
+                                                   tracks = tracks(track_feature(annotation_file_url,
+                                                                                  assembly(url()))),
+                                                    location = location(), #placeholder
+                                                    defaultSession = default_session(assembly(url()),
+                                                                                     c(track_feature(annotation_file_url,
+                                                                                                     assembly(url()))))
+   )
+  })
+  
 }
 
 
