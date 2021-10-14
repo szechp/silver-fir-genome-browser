@@ -6,3 +6,6 @@ annotation_file_url <- "http://127.0.0.1:5000/Abal.1_1.gff.fixed.sorted_v2.gff.g
 
 #path to the blast executables (bin folder)
 blast_path <- "~/ncbi-blast-2.12.0+/bin/"
+
+#specify the location of the local BLAST Database
+BLAST_db_path <- c("/media/sf_Masterarbeit/silver-fir-genome-browser/genome_data/splitfasta/Abal.1_1_filtered.1000.blast_db")
