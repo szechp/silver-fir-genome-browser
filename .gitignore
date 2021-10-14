@@ -37,3 +37,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+#genome Data, database otherwise the respository would be too big
+/genome_data/
+database.csv
+
+#blast executable, user should provide it themself
+/ncbi-blast*
