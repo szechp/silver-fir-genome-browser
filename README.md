@@ -4,7 +4,7 @@ a searchable genome browser for the European silver fir (Abies alba)
 
 ## Introduction
 ### Genome data information
-in my case a silver fir reference genome was used:
+in my case a silver fir reference genome was used, it is available for download [here](https://treegenesdb.org/FTP/Genomes/Abal/v1.1/)
 ```
 ########
 QUAST Results
@@ -54,18 +54,26 @@ BUSCO Results
 	852	Missing BUSCOs (M)			   
 	1614	Total BUSCO groups searched		   
 ```
+## Requirenments
+* Linux
+* R 4.1.1+ (lower probably works too, but I developed on that version)
+* RStudio
+
 ## Dependencies
 ### R libraries
-* shiny
+* data.table
+* dbplyr
+* dplyr
 * DT
 * JBrowseR
-* dbplyr
-* tidyr
-* stringr
-* shinythemes
-* 
 * plyr
+* shiny
+* shinythemes
+* stringr
+* tibble
+* tidyr
 * XML
+
 ### Command-line tools
 * [genometools](http://genometools.org/)
 * [samtools](https://www.htslib.org/)
@@ -74,7 +82,7 @@ BUSCO Results
 * [faSplit](http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faSplit)
 * [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 ## Tools and data preparation workflow
-You need to prepare the files using the guides below and add them to config.R
+**You need to prepare the files using the guides below and add them to config.R**
 
 ### Preparing the genome fasta
 using faSplit start with extracting each single fasta from the genome
