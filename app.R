@@ -53,9 +53,10 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                 #This block gives us all the inputs:
                 mainPanel(
                   headerPanel('Shiny Blast!'),
-                  textAreaInput('query', 'Input sequence:', value = "", placeholder = "", width = "100%", height="200px"),
+                  textAreaInput('query', 'Input sequence:', value = "", placeholder = "", width="100%", height = "200px"),
                   selectInput("eval", "e-value:", choices=c(1,0.001,1e-4,1e-5,1e-10), width="100px"),
-                  actionButton("blast", "BLAST!")
+                  actionButton("blast", "BLAST!"), 
+                  width = 12
                 ),
                 
                 #this snippet generates a progress indicator for long BLASTs
@@ -70,7 +71,8 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                   DT::dataTableOutput("blastResults"),
                   p("Alignment:", tableOutput("clicked") ),
                   verbatimTextOutput("alignment"),
-                  JBrowseROutput("browserOutput_BLAST_search")
+                  JBrowseROutput("browserOutput_BLAST_search"), 
+                  width = 12
                 ))
                 ))
 
