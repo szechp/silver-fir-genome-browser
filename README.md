@@ -102,7 +102,7 @@ for FILE in *; do samtools faidx $FILE; done
 gffread -O <in.gff> -o <out.gff>
 
 ```
-#### prepare gff file for Jbrowse
+#### prepare gff file for JBrowse
 ```
 gt gff3 -sortlines -tidy -retainids <in_fixed.gff> > <out.sorted.gff>
 bgzip <out.sorted.gff>
@@ -113,3 +113,4 @@ tabix <out.sorted.gff.gz>
 ```
 makeblastdb -in <your_file.fa> -out <my_blast_db> -parse_seqids -dbtype nucl
 ```
+(it's also required to provide the path to the BLAST executable in R.config)
