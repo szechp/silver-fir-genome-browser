@@ -1,3 +1,6 @@
+#set working directory
+setwd(dirname(rstudioapi::getSourceEditorContext()$path)) #set working directory to script destination, this only works when running in RStudio
+
 #URLs
 #specify the location of the splitted fasta files
 splitted_fastas_url <- "http://127.0.0.1:5000/splitfasta/splitted/"
