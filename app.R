@@ -8,9 +8,6 @@ library(plyr)
 library(dplyr)
 
 
-#set working directory to script destination
-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-
 #file check to avoid recreating the db at every start up
 if (file.exists("database.csv") == F) {
   source("data_wrangling_scripts/create_full_text_search_database.R")
@@ -124,7 +121,7 @@ server <- function(input, output, session) {
     }
     
     #calls the blast
-    data <- system(paste0("~/ncbi-blast-2.12.0+/bin/blastn", " -query ",tmp," -db ",BLAST_db_path," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 "), intern = T)
+    data <- system(paste0(blast_path, "blastn", " -query ",tmp," -db ",BLAST_db_path," -evalue ",input$eval," -outfmt 5 -max_hsps 1 -max_target_seqs 10 "), intern = T)
     #write.table(data, file = "debug2.txt")
     xmlParse(data)
   }, ignoreNULL= T)
