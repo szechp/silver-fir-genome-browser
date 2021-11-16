@@ -62,17 +62,19 @@ BUSCO Results
 ## Dependencies
 ### R libraries
 * data.table
-* dbplyr
-* dplyr
 * DT
 * JBrowseR
 * plyr
 * shiny
 * shinythemes
-* stringr
-* tibble
-* tidyr
 * XML
+* the following are included in tidyverse, but can be installed seperately:
+    - dplyr
+    - dbplyr
+    - stringr
+    - tibble
+    - tidyr
+
 
 ### Command-line tools
 * [genometools](http://genometools.org/)
