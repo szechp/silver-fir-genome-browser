@@ -68,12 +68,12 @@ BUSCO Results
 * shiny
 * shinythemes
 * XML
-* tidyverse (the required packages are included in tidyverse, but can be installed separately:
+* tidyverse - the required packages are included in tidyverse, but can be installed separately:
     - dplyr
     - dbplyr
     - stringr
     - tibble
-    - tidyr)
+    - tidyr
 
 
 ### Command-line tools
