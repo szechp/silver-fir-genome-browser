@@ -1,7 +1,10 @@
 #set working directory
 setwd(dirname(rstudioapi::getSourceEditorContext()$path)) #set working directory to script destination, this only works when running in RStudio
 
-#URLs
+#file locations for primer design
+splitted_fastas <- "/media/sf_Masterarbeit/silver-fir-genome-browser/genome_data/splitfasta"
+
+#URLs required for Jbrowse
 #specify the location of the splitted fasta files
 splitted_fastas_url <- "http://127.0.0.1:5000/splitfasta/splitted/"
 #specify the location of the annotation file (a sorted bigzipped gff file is needed)

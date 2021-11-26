@@ -37,7 +37,8 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                 navbarPage("Abies Alba Genome Browser",
                   tabPanel("full-text search",
                     DT::dataTableOutput("DT_annotations"),
-                    JBrowseROutput("browserOutput_ft_search")
+                    JBrowseROutput("browserOutput_ft_search"),
+                    actionButton("gen_P3_file", "generate primer3 queue")
                   ),
                   tabPanel("BLAST-search",
                     tagList(
@@ -101,7 +102,13 @@ server <- function(input, output, session) {
                                                                                                     assembly(url()))))
     )
   })
-
+  
+  ##generate primer3 queue with action button##
+  
+  p3.input=tempfile()
+  fasta_file=reactive(paste0(splitted_fastas, database[input$DT_annotations_rows_selected,2], ".fa"))
+  
+  observeEvent(input$gen_P3_file, {writeLines(paste0(fasta_file()), p3.input)})
 
   ##################################
   ###server code for BLAST search###
