@@ -35,10 +35,21 @@ options(DT.options = list(pageLength = 5))
 #############
 ui <- fluidPage(theme = shinytheme("flatly"),
                 navbarPage("Abies Alba Genome Browser",
-                  tabPanel("full-text search",
-                    DT::dataTableOutput("DT_annotations"),
-                    JBrowseROutput("browserOutput_ft_search")
-                  ),
+                           tabPanel(
+                             "Welcome",
+                             h2("Welcome to the Abies Alba Genome Browser"),
+                             fluidRow(
+                               column(7,
+                                      includeMarkdown("welcome.Rmd")),
+                             column(5,
+                               img(src = "360px-Abies_alba1.jpg", width = "50%")
+                             )
+                           )),
+                           tabPanel(
+                             "full-text search",
+                             DT::dataTableOutput("DT_annotations"),
+                             JBrowseROutput("browserOutput_ft_search")
+                           ), 
                   tabPanel("BLAST-search",
                     tagList(
                   tags$head(
