@@ -7,6 +7,10 @@ library(XML)
 library(plyr)
 library(dplyr)
 
+library(DBI)
+library(dbplyr)
+library(RSQLite)
+library(shinyWidgets)
 
 #file check to avoid recreating the db at every start up
 if (file.exists("database.csv") == F) {
@@ -36,7 +40,16 @@ options(DT.options = list(pageLength = 5))
 ui <- fluidPage(theme = shinytheme("flatly"),
                 navbarPage("Abies Alba Genome Browser",
                   tabPanel("full-text search",
-                    DT::dataTableOutput("DT_annotations"),
+                           searchInput(
+                             inputId = "search",
+                             label = "Enter search query",
+                             value = "",
+                             placeholder = "e.g. fatty acid",
+                             btnSearch = icon("search"),
+                             btnReset = icon("remove", verify_fa = FALSE),
+                             width = "450px"
+                           ),
+                           DTOutput("table"),
                     JBrowseROutput("browserOutput_ft_search")
                   ),
                   tabPanel("BLAST-search",
@@ -79,17 +92,31 @@ server <- function(input, output, session) {
   #####################################
   ###servercode for full text search###
   #####################################
+  con <- dbConnect(RSQLite::SQLite(), "database.db")
+  
+  sqlInput <- reactive({
+    paste("SELECT * FROM genome_data WHERE Names like", "'%", input$search, "%';")
+  })
+  
+  
+  sqlOutput <- reactive({
+    dbGetQuery(con, sqlInput())
+  })
+  
+  #dbDisconnect(db)
+  output$table <- DT::renderDT(sqlOutput(), server=TRUE, options=list(pageLength=10), selection = "single", rownames = F)
 
+  
   output$DT_annotations <-
     DT::renderDataTable(database, selection = "single", rownames = F)
   
   output$select_entry = renderPrint(location())
 
   #get location and filename from selected entry and display it in JBrowse
-  url <- reactive(paste0(splitted_fastas_url, database[input$DT_annotations_rows_selected,2], ".fa")
+  url <- reactive(paste0(splitted_fastas_url, database[input$table_rows_selected,2], ".fa")
   )
   
-  location_ft_search <- reactive(paste0(database[input$DT_annotations_rows_selected,2],":", database[input$DT_annotations_rows_selected,4], "..", database[input$DT_annotations_rows_selected,5]))
+  location_ft_search <- reactive(paste0(database[input$table_rows_selected,2],":", database[input$table_rows_selected,4], "..", database[input$table_rows_selected,5]))
   
   output$browserOutput_ft_search <- renderJBrowseR({JBrowseR("View",
                                                   assembly = assembly(url()),

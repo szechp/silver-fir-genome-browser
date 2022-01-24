@@ -41,6 +41,7 @@ vignettes/*.pdf
 #genome Data, database otherwise the respository would be too big
 /genome_data/
 database.csv
+database.db
 
 #blast executable, user should provide it themself
 /ncbi-blast*
