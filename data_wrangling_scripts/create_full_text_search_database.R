@@ -61,4 +61,7 @@ merge(x = annotations,
       all.x = T) %>% dplyr::relocate(ID, .after = end) %>% dplyr::arrange(contig) -> merged
 
 #write to csv
-write.csv(merged, "database.csv", row.names = T)
+write.csv(merged, "temp_database.csv", row.names = T)
+
+system("echo .import temp_database.csv genome_data | sqlite-tools-linux-x86-3370200/sqlite3 -csv -separator ',' database.db")
+system("rm temp_database.csv")
