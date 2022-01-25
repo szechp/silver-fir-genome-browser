@@ -95,7 +95,13 @@ server <- function(input, output, session) {
   con <- dbConnect(RSQLite::SQLite(), "database.db")
   
   sqlInput <- reactive({
-    paste("SELECT * FROM genome_data WHERE Names like", "'%", input$search, "%';")
+    paste0("SELECT * 
+            FROM genome_data
+          WHERE contig LIKE '%",input$search,"%'
+           OR Names LIKE '%",input$search,"%'
+           OR ID LIKE '%",input$search,"%'
+           OR Parent LIKE '%",input$search,"%'
+           OR type LIKE '%",input$search,"%'")
   })
   
   
@@ -104,15 +110,16 @@ server <- function(input, output, session) {
   })
   
   #dbDisconnect(db)
-  output$table <- DT::renderDT(sqlOutput(), server=TRUE, options=list(pageLength=10), selection = "single", rownames = F)
+  output$table <- DT::renderDT(sqlOutput(), server=TRUE, options=list(pageLength = 10, dom = 't'), selection = list(mode = "single", selected = c(1)), rownames = F)
 
   
   output$DT_annotations <-
-    DT::renderDataTable(database, selection = "single", rownames = F)
+    DT::renderDataTable(database, selection = list(mode = "single", selected = c(341)), rownames = F)
   
   output$select_entry = renderPrint(location())
 
   #get location and filename from selected entry and display it in JBrowse
+  
   url <- reactive(paste0(splitted_fastas_url, database[input$table_rows_selected,2], ".fa")
   )
   
@@ -122,7 +129,7 @@ server <- function(input, output, session) {
                                                   assembly = assembly(url()),
                                                   tracks = tracks(track_feature(annotation_file_url,
                                                                                 assembly(url()))),
-                                                  location = location_ft_search(), #placeholder
+                                                  location = location_ft_search(),
                                                   defaultSession = default_session(assembly(url()),
                                                                                     c(track_feature(annotation_file_url,
                                                                                                     assembly(url()))))
@@ -243,6 +250,11 @@ server <- function(input, output, session) {
                                                                                                      assembly(url_BLAST_search()))))
    )
   })
+  
+  cancel.onSessionEnded <- session$onSessionEnded(function() {
+    dbDisconnect(con)
+  })
+  
 }
 
 shinyApp(ui, server)
