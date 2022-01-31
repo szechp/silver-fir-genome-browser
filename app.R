@@ -7,18 +7,16 @@ library(XML)
 library(plyr)
 library(dplyr)
 
-library(DBI)
-library(dbplyr)
 library(RSQLite)
 library(shinyWidgets)
+
+#read config file
+source("config.R")
 
 #file check to avoid recreating the db at every start up
 if (file.exists("database.csv") == F) {
   source("data_wrangling_scripts/create_full_text_search_database.R")
 }
-
-#read config file
-source("config.R")
 
 #read csv to data table
 database <- fread("database.csv")
@@ -27,8 +25,7 @@ setindex(database, Names, ID)
 
 
 #check if config.R contains localhost, create local server to serve genome data if true
-if (grepl("http://127.0.0.1:5000*", splitted_fastas_url) == T &
-    grepl("http://127.0.0.1:5000*", annotation_file_url) == T) {
+if (run_from_server == F) {
   try(data_server <- serve_data("genome_data/"))
 }
 
