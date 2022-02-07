@@ -1,1 +1,6 @@
-The Silver Fir Genome Project aims to establish genomic resources for Abies alba (European Silver Fir). In association with the AForGeN working group, this project aims to follow the successful model of the PineRefSeq project. From funding to comparative analysis, this project is open to collaboration from any field, any institution, and any country.
+The Silver Fir Genome Project aims to establish genomic resources for *Abies alba (European Silver Fir)*. In association with the AForGeN working group, this project aims to follow the successful model of the PineRefSeq project. From funding to comparative analysis, this project is open to collaboration from any field, any institution, and any country. 
+
+This site features a visualized view of the *Abies alba* genome found [here](https://treegenesdb.org/FTP/Genomes/Abal/v1.1/). To make browsing the genome easier, a full text search and a BLAST search have been included.
+
+
+More Information on the Projekt: https://aforgen.wsl.ch/en/silver-fir-genome-project.html
