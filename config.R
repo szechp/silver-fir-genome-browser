@@ -1,5 +1,13 @@
 #set working directory
-setwd(dirname(rstudioapi::getSourceEditorContext()$path)) #set working directory to script destination, this only works when running in RStudio
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))#only works in RStudio, has to be set manually when running from server
+
+#run locally?
+run_from_server = FALSE
+
+#for db creation (Note: File locations have to be specified as Os file paths, not URLs)
+#specify the location of the splitted fasta files
+annotation_file <- "genome_data/Abal.1_1.fixed_v2.gff"
+protein_definitions <- "genome_data/Abal.1_1.protein_definition.txt"
 
 #URLs
 #specify the location of the splitted fasta files
