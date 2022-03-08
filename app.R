@@ -46,10 +46,18 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                                img(src = "360px-Abies_alba1.jpg", width = "50%")
                              )
                            )),
-                           tabPanel(
-                             "full-text search",
-                             DT::dataTableOutput("DT_annotations"),
-                             JBrowseROutput("browserOutput_ft_search")
+                           tabPanel("full-text search",
+                                    searchInput(
+                                      inputId = "search",
+                                      label = "Enter search query",
+                                      value = "",
+                                      placeholder = "e.g. fatty acid",
+                                      btnSearch = icon("search"),
+                                      btnReset = icon("remove", verify_fa = FALSE),
+                                      width = "450px"
+                                    ),
+                                    DTOutput("table"),
+                                    JBrowseROutput("browserOutput_ft_search")
                            ), 
 
                   tabPanel("BLAST-search",
