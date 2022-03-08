@@ -4,7 +4,7 @@ library(tibble)
 library(stringr)
 
 #read annotation file and store in DF
-read.delim("genome_data/Abal.1_1.fixed_v2.gff",
+read.delim(annotation_file,
            header = F,
            comment.char = "#") %>% dplyr::select(V1, V3, V4, V5, V9) %>%
   
@@ -31,7 +31,7 @@ read.delim("genome_data/Abal.1_1.fixed_v2.gff",
 
 #read protein definition file and store in DF
 read.delim(
-  "genome_data/Abal.1_1.protein_definition.txt",
+  protein_definitions,
   sep = "\t",
   na.strings = "---NA---",
   col.names = c("ID", "Rest"),
@@ -52,7 +52,7 @@ read.delim(
   dplyr::mutate(Names = str_replace_all(Names, "Short=", ", ")) %>%
   dplyr::mutate(Names = str_replace(Names, ", ", "")) %>%
   dplyr::filter(grepl("P1$", ID)) %>%
-  dplyr::mutate(ID = dplyr::case_when(grepl("P1$", ID) ~ str_sub(ID, 1, nchar(ID) -2))) -> protein_def
+  dplyr::mutate(ID = dplyr::case_when(grepl("P1$", ID) ~ str_sub(ID, 1, nchar(as.character(ID)) -2))) -> protein_def
 
 #join the two data frames and save to file
 merge(x = annotations,
@@ -62,3 +62,5 @@ merge(x = annotations,
 
 #write to csv
 write.csv(merged, "database.csv", row.names = T)
+
+system("echo .import database.csv genome_data | sqlite-tools-linux-x86-3370200/sqlite3 -csv -separator ',' database.db")
