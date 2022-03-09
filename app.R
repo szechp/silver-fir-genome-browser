@@ -35,10 +35,10 @@ options(DT.options = list(pageLength = 5))
 ##shiny app##
 #############
 ui <- fluidPage(theme = shinytheme("flatly"),
-                navbarPage("Abies Alba Genome Browser",
+                navbarPage("Abies alba genome browser",
                            tabPanel(
-                             "Welcome",
-                             h2("Welcome to the Abies Alba Genome Browser"),
+                             "welcome",
+                             h2("Welcome to the Abies alba genome browser"),
                              fluidRow(
                                column(7,
                                       includeMarkdown("welcome.Rmd")),
